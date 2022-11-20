@@ -1,5 +1,6 @@
 #include <iostream>
 #include <windows.h>
+#include <stdlib.h> 
 using namespace std;
 
 struct ScreenSize {
@@ -22,12 +23,35 @@ ScreenSize getScreenSize()
     return screenSize;
 }
 
+void GoToXY(int column, int line)
+{
+    COORD coord;
+    coord.X = column;
+    coord.Y = line;
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleCursorPosition(hConsole, coord);
+}
+
 int main(int argc, char *argv[]) 
 {
     ScreenSize screenSize = getScreenSize();
-    // SetConsoleCursorPosition
 
-    printf("columns: %d\n", screenSize.columns);
-    printf("rows: %d\n", screenSize.rows);
+    int tick = 0;
+
+    while (true)
+    {
+        ScreenSize screenSize = getScreenSize();
+        GoToXY(0, 0);
+
+        // Creating Blank Slate
+        string line = "";
+
+        printf("tick: %d\n", tick);
+
+        Sleep(1);
+        tick++;
+    }
+
     return 0;
 }
