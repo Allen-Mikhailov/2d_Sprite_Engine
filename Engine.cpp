@@ -1,9 +1,10 @@
 #include <iostream>
 #include <windows.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 using namespace std;
 
-struct ScreenSize {
+struct ScreenSize
+{
     int columns;
     int rows;
 };
@@ -33,21 +34,57 @@ void GoToXY(int column, int line)
     SetConsoleCursorPosition(hConsole, coord);
 }
 
-int main(int argc, char *argv[]) 
+char * getScreenBase(ScreenSize screenSize)
 {
-    ScreenSize screenSize = getScreenSize();
+    // Creating Blank Slate
+    int stringSize = screenSize.columns * (screenSize.rows+1);
+    char * screenString = (char *) malloc(stringSize * sizeof(char));
+    char * head = screenString;
+
+    // Filling String
+    for (int y = 0; y < screenSize.rows; y++)
+    {
+        for (int y = 0; y < screenSize.columns; y++)
+        {
+            *head = ' ';
+            head++;
+        }
+
+        *head = '\n';
+        head++;
+    }
+    head--;
+    *head = '\0';
+    return screenString;
+}
+
+string writeToBase(ScreenSize screenSize, string str, int column, int row)
+{
+
+}
+
+int main(int argc, char *argv[])
+{
+    ScreenSize screenSize;
+    char * ScreenBase;
 
     int tick = 0;
 
     while (true)
     {
-        ScreenSize screenSize = getScreenSize();
+        ScreenSize newScreenSize = getScreenSize();
+
+        if (screenSize.columns != newScreenSize.columns || screenSize.rows != newScreenSize.rows)
+        {
+            // new Screen size
+            screenSize = newScreenSize;
+            ScreenBase = getScreenBase(screenSize);
+        }
+
+        printf(ScreenBase);
         GoToXY(0, 0);
-
-        // Creating Blank Slate
-        string line = "";
-
         printf("tick: %d\n", tick);
+        GoToXY(0, 0);
 
         Sleep(1);
         tick++;
