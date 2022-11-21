@@ -15,7 +15,7 @@ void Draw(Screen screen, int tick)
     writePixel(screen, '0', 10, 0);
 }
 
-int main(int argc, char *argv[])
+void Start(int argc, char *argv[])
 {
-    Start();
+    
 }

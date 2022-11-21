@@ -15,6 +15,9 @@ struct Screen
     char * buffer;
 };
 
+void Draw(Screen screen, int tick);
+void Start(int argc, char *argv[]);
+
 ScreenSize getScreenSize()
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -39,8 +42,6 @@ void GoToXY(int column, int line)
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(hConsole, coord);
 }
-
-void Draw(Screen screen, int tick);
 
 int ScreenStringSize(ScreenSize screenSize)
 {
@@ -87,7 +88,7 @@ void writePixel(Screen screen, char pixel, int x, int y)
     *sBuffer = pixel;
 }
 
-int Start()
+int main(int argc, char *argv[])
 {
     Screen screen;
     char * screenBase;
