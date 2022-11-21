@@ -1,7 +1,7 @@
 #include <iostream>
 #include <windows.h>
 #include <stdlib.h>
-#include "Engine.cpp"
+#include "../../src/Engine.cpp"
 using namespace std;
 
 struct drop {
@@ -9,7 +9,7 @@ struct drop {
     int y;
 };
 
-int dropCount = 1;
+int dropCount = 25;
 drop* droplets;
 
 void Draw(Screen screen, int tick)
@@ -18,15 +18,18 @@ void Draw(Screen screen, int tick)
     drop* head = droplets;
     for (int i = 0; i < dropCount; i++)
     {
-        head->x = (head->x-1)%screen.size.columns;
-        head->y = (head->y+1)%screen.size.rows;
-        writePixel(screen, '/', head->x, head->y);
+        head->x = (screen.size.columns-2+head->x-1)%(screen.size.columns-2);
+        head->y = (screen.size.rows-1+head->y+1)%(screen.size.rows-1);
+        writePixel(screen, '/', head->x+1, head->y);
+        writePixel(screen, '/', head->x, head->y+1);
         head++;
     }
 }
 
-void Start(ScreenSize size)
+int main()
 {
+    ScreenSize size = getScreenSize();
+
     droplets = (drop*) malloc(sizeof(drop) * dropCount);
     drop* head = droplets;
     for (int i = 0; i < dropCount; i++)
@@ -34,5 +37,11 @@ void Start(ScreenSize size)
         head->x = rand()%size.columns;
         head->y = rand()%size.rows;
         head++;
+    }
+
+    while(true)
+    {
+        handleTick();
+        Sleep(150);
     }
 }
