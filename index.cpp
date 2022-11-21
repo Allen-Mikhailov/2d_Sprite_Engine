@@ -9,13 +9,30 @@ struct drop {
     int y;
 };
 
+int dropCount = 100;
+drop* droplets;
+
 void Draw(Screen screen, int tick)
 {
 
-    writePixel(screen, '0', 10, 0);
+    drop* head = droplets;
+    for (int i = 0; i < dropCount; i++)
+    {
+        head->x = (head->x-1)%screen.size.columns;
+        head->y = (head->y+1)%screen.size.rows;
+        writePixel(screen, '/', head->x, head->y);
+        head++;
+    }
 }
 
-void Start(int argc, char *argv[])
+void Start(ScreenSize size)
 {
-    
+    droplets = (drop*) malloc(sizeof(drop) * dropCount);
+    drop* head = droplets;
+    for (int i = 0; i < dropCount; i++)
+    {
+        head->x = rand()%size.columns;
+        head->y = rand()%size.rows;
+        head++;
+    }
 }

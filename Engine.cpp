@@ -16,7 +16,7 @@ struct Screen
 };
 
 void Draw(Screen screen, int tick);
-void Start(int argc, char *argv[]);
+void Start(ScreenSize size);
 
 ScreenSize getScreenSize()
 {
@@ -95,6 +95,9 @@ int main(int argc, char *argv[])
 
     int tick = 0;
 
+    ScreenSize newScreenSize = getScreenSize();
+    Start(newScreenSize);
+
     while (true)
     {
         ScreenSize newScreenSize = getScreenSize();
@@ -119,7 +122,7 @@ int main(int argc, char *argv[])
         printf("tick: %d\n", tick);
         GoToXY(0, 0);
 
-        Sleep(1);
+        Sleep(200);
         tick++;
     }
 
