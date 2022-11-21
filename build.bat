@@ -1,2 +1,2 @@
 @echo off
-g++ Engine.cpp -o a.exe
+g++ index.cpp -o a.exe

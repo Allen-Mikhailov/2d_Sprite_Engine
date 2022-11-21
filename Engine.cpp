@@ -9,6 +9,12 @@ struct ScreenSize
     int rows;
 };
 
+struct Screen
+{
+    ScreenSize size;
+    char * buffer;
+};
+
 ScreenSize getScreenSize()
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -34,17 +40,24 @@ void GoToXY(int column, int line)
     SetConsoleCursorPosition(hConsole, coord);
 }
 
+void Draw(Screen screen, int tick);
+
+int ScreenStringSize(ScreenSize screenSize)
+{
+    return screenSize.columns * (screenSize.rows+1);
+}
+
 char * getScreenBase(ScreenSize screenSize)
 {
     // Creating Blank Slate
-    int stringSize = screenSize.columns * (screenSize.rows+1);
+    int stringSize = ScreenStringSize(screenSize);
     char * screenString = (char *) malloc(stringSize * sizeof(char));
     char * head = screenString;
 
     // Filling String
     for (int y = 0; y < screenSize.rows; y++)
     {
-        for (int y = 0; y < screenSize.columns; y++)
+        for (int x = 0; x < screenSize.columns; x++)
         {
             *head = ' ';
             head++;
@@ -58,15 +71,26 @@ char * getScreenBase(ScreenSize screenSize)
     return screenString;
 }
 
-string writeToBase(ScreenSize screenSize, string str, int column, int row)
+void writeToBase(Screen screen, char * str, int column, int row)
 {
+    int strLength = strlen(str);
+    if (strLength+column > screen.size.columns)
+        strLength = screen.size.columns-column;
 
+    
 }
 
-int main(int argc, char *argv[])
+void writePixel(Screen screen, char pixel, int x, int y)
 {
-    ScreenSize screenSize;
-    char * ScreenBase;
+    char * sBuffer = screen.buffer;
+    sBuffer += x + (screen.size.columns+1)*y;
+    *sBuffer = pixel;
+}
+
+int Start()
+{
+    Screen screen;
+    char * screenBase;
 
     int tick = 0;
 
@@ -74,15 +98,23 @@ int main(int argc, char *argv[])
     {
         ScreenSize newScreenSize = getScreenSize();
 
-        if (screenSize.columns != newScreenSize.columns || screenSize.rows != newScreenSize.rows)
+        if (screen.size.columns != newScreenSize.columns || screen.size.rows != newScreenSize.rows)
         {
             // new Screen size
-            screenSize = newScreenSize;
-            ScreenBase = getScreenBase(screenSize);
+            screen.size = newScreenSize;
+            screen.buffer = (char *) malloc(ScreenStringSize(screen.size));
+
+            free(screenBase);
+            screenBase = getScreenBase(newScreenSize);
         }
 
-        printf(ScreenBase);
+        strcpy(screen.buffer, screenBase);
+
+        Draw(screen, tick);
+
+        printf(screen.buffer);
         GoToXY(0, 0);
+
         printf("tick: %d\n", tick);
         GoToXY(0, 0);
 
