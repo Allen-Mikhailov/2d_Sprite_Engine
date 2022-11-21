@@ -12,16 +12,24 @@ struct drop {
 int dropCount = 25;
 drop* droplets;
 
+int absMod(int value, int mode)
+{
+    return (mode+value)%mode;
+}
+
 void Draw(Screen screen, int tick)
 {
-
+    ScreenSize size = screen.size;
     drop* head = droplets;
     for (int i = 0; i < dropCount; i++)
     {
-        head->x = (screen.size.columns-2+head->x-1)%(screen.size.columns-2);
-        head->y = (screen.size.rows-1+head->y+1)%(screen.size.rows-1);
-        writePixel(screen, '/', head->x+1, head->y);
-        writePixel(screen, '/', head->x, head->y+1);
+        // Movement
+        head->x = absMod(head->x-1, size.columns-2);
+        head->y = absMod(head->y+1, size.rows-1);
+
+        //Drawing
+        writePixel(screen, '/', absMod(head->x+1, size.columns-2), head->y);
+        writePixel(screen, '/', head->x, absMod(head->y+1, size.rows-1));
         head++;
     }
 }
