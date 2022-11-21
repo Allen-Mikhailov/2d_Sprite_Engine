@@ -9,7 +9,7 @@ struct drop {
     int y;
 };
 
-int dropCount = 100;
+int dropCount = 1;
 drop* droplets;
 
 void Draw(Screen screen, int tick)

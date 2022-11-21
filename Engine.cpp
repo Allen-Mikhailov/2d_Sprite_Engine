@@ -1,6 +1,7 @@
 #include <iostream>
 #include <windows.h>
 #include <stdlib.h>
+#include <string>
 using namespace std;
 
 struct ScreenSize
@@ -29,7 +30,7 @@ ScreenSize getScreenSize()
 
     ScreenSize screenSize;
     screenSize.columns = columns;
-    screenSize.rows = rows;
+    screenSize.rows = rows-1;
     return screenSize;
 }
 
@@ -78,7 +79,15 @@ void writeToBase(Screen screen, char * str, int column, int row)
     if (strLength+column > screen.size.columns)
         strLength = screen.size.columns-column;
 
-    
+    char * head = screen.buffer;
+
+    head += (screen.size.columns+1)*row + column;
+    for (int i = 0; i < strLength; i++)
+    {
+        *head = *str;
+        head++;
+        str++;
+    }
 }
 
 void writePixel(Screen screen, char pixel, int x, int y)
@@ -116,10 +125,13 @@ int main(int argc, char *argv[])
 
         Draw(screen, tick);
 
-        printf(screen.buffer);
-        GoToXY(0, 0);
+        // Number
+        string tickString = "Tick: " +  to_string(tick);
+        char * tickS = (char*) malloc(sizeof(char) * strlen(tickString.c_str()));
+        strcpy(tickS, tickString.c_str());
+        writeToBase(screen, tickS, 0, 0);
+        cout << screen.buffer;
 
-        printf("tick: %d\n", tick);
         GoToXY(0, 0);
 
         Sleep(200);
