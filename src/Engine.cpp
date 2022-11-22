@@ -119,12 +119,7 @@ void handleTick()
     strcpy(screen.buffer, screenBase);
 
     Draw(screen, tick);
-
-    // Number
-    string tickString = "Tick: " + to_string(tick);
-    char *tickS = (char *)malloc(sizeof(char) * strlen(tickString.c_str()));
-    strcpy(tickS, tickString.c_str());
-    writeToBase(screen, tickS, 0, 0);
+    
     cout << screen.buffer;
 
     GoToXY(0, 0);

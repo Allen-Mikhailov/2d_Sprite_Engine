@@ -1,5 +1,12 @@
 {
     "files.associations": {
-        "string": "cpp"
+        "string": "cpp",
+        "xstring": "cpp",
+        "xiosbase": "cpp",
+        "xutility": "cpp",
+        "cstdlib": "cpp",
+        "cmath": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp"
     }
 }
